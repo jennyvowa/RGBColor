@@ -13,8 +13,23 @@ document.addEventListener("DOMContentLoaded", function (event) {
     document.getElementById("buttonClear").addEventListener("click", clearAddForm);
 
     // color library page 
-    $(document).on("pagebeforeshow", "#colorLibrary", function (event) {   // have to use jQuery 
-        showLibraryPage("lbr","index.html#libraryDetails", randomColorList);
+    $(document).on("pagebeforeshow", "#colorLibrary", function (event) {   
+        // have to use jQuery to get data serverRandomColorList from the server and overwrite randoColorList
+        $.get("/colorLibrary", function(data, status){
+            randomColorList = data;
+            console.log(randomColorList);
+        
+        //showLibraryPage("lbr","index.html#libraryDetails", randomColorList);
+        let libraryColorUL = document.getElementById('lbr-list-color');
+        libraryColorUL.innerHTML = "";
+    
+        randomColorList.forEach(function (oneColor) {   // use handy array forEach method
+            console.log(oneColor.colorName);
+            appendAColor(oneColor, 'lbr-list-color', 'lbr-color-classname', 'lbr-data-parm', "li");
+            
+        });
+        activateAColor('lbr-color-classname', 'lbr-data-parm', 'lbrColorName', 'lbrColorID', "index.html#libraryDetails");
+        });
     });
 
     // color library detail page
@@ -175,8 +190,29 @@ function updateObject(localParm) {
 // Append the created object color to the page
 function appendAColor(aColor, listContainerName, colorClassName, dataParm, elementType) {
     let pageRandomColorPlaceHolder = document.getElementById(listContainerName);
-    pageRandomColorPlaceHolder.append(aColor.displayColor(colorClassName, dataParm, elementType));
+    pageRandomColorPlaceHolder.append(displayColor(aColor,colorClassName, dataParm, elementType));
 
+};
+
+function displayButton (aColor, colorClassName, buttonName, buttonColor){
+    let rgbButton = document.createElement("button");
+    rgbButton.className = colorClassName +"-btn";
+    rgbButton.id = aColor.colorID;
+    rgbButton.setAttribute(colorClassName + "-parm", rgbButton.id);
+    rgbButton.textContent = buttonName;
+    rgbButton.style.background = buttonColor;
+    return rgbButton;
+};
+
+
+function displayColor (oneColor, colorClassName, dataParm, elementType) {
+    let aColor = document.createElement(elementType);
+    aColor.className = colorClassName;
+    aColor.id = oneColor.colorName;
+    aColor.setAttribute(dataParm, aColor.id);
+    aColor.textContent = `ColorID ${oneColor.colorID} :  RGB ${oneColor.valueR} : ${oneColor.valueG} : ${oneColor.valueB}`;
+    aColor.style.background = "rgb(" + oneColor.valueR + "," + oneColor.valueG + "," + oneColor.valueB + ")";
+    return aColor;
 };
 
 // Create an button  
@@ -184,7 +220,7 @@ function appendAColor(aColor, listContainerName, colorClassName, dataParm, eleme
 //listContainerName: place holder for RGB button to attach to
 function appendAButton(aColor, listContainerName, colorClassName, buttonName, buttonColor) {
     let colorPlaceHolder = document.getElementById(listContainerName);
-    colorPlaceHolder.append(aColor.displayButton(colorClassName, buttonName, buttonColor));
+    colorPlaceHolder.append(displayButton(aColor, colorClassName, buttonName, buttonColor));
 };
 
 
@@ -219,7 +255,8 @@ function createMonochromaticColorDiv(colorArray, preMonoID, monoClassName, color
 
     let stringTempMoArray = JSON.stringify(moColorList); // convert array to "string"
     localStorage.setItem('tempMonoArray', stringTempMoArray);
-
+    
+    // buttons add to favorite, for each button get its attributes tempMono, tempMonoName -> save to local storage, and call addTofavorite function
     let tempMoColList = document.querySelectorAll('.suggestion-color-btn');
     tempMoColList.forEach((element, i) => {
         element.addEventListener('click', function () {
