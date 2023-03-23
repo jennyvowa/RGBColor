@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="javascripts/color.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+    <link rel="stylesheet" href="stylesheets/themes/jenny-modified-themes.min.css" />
+    <script src="javascripts/main.js"></script>
+
+    <title>RGB color creator</title>
+</head>
+
+<body>
+
+
+    <!-- =================================  HOME  ================================================= -->
+    <div data-role="page" id="home" data-theme="a">
+
+        <!-- header -->
+        <div data-role="header" data-theme="a">
+            <h2 class="ui-title">RGB color creator - Home</h2>
+            <div data-role="navbar" id="navbar" data-theme="a">
+                <ul>
+                    <li><a href="#home">Home Page</a></li>
+                    <li><a href="#colorMaker">Color Maker</a></li>
+                    <li><a href="#addColor">Create a Color</a></li>
+                    <li><a href="#colorLibrary">Color Library</a></li>
+                </ul>
+            </div><!-- /navbar -->
+        </div>
+
+
+        <!-- page content -->
+        <div data-role="content" data-theme="a">
+            <div id="homediv">
+                <h2 id="title">Create Your Color Library</h2>
+                <img src="images/color_library.png" alt="an image of color library">
+            </div>
+        </div>
+
+        <!-- page footer -->
+        <div data-role="footer" id="footer" data-theme="a">
+            <h3>Copyright 2023 by Hoa Vo & Misako Ueshima</h3>
+        </div>
+
+    </div>
+    <!-- ==================================  HOME PAGE END   ================================================= -->
+
+
+
+    <!-- =================================  COLOR MAKER PAGE  ================================================= -->
+    <div data-role="page" id="colorMaker">
+
+        <!-- header -->
+        <div data-role="header">
+            <h2>RGB color creator - Create Color</h2>
+
+            <div data-role="navbar" id="navbar">
+                <ul>
+                    <li><a href="#home">Home Page</a></li>
+                    <li><a href="#colorMaker">Color Maker</a></li>
+                    <li><a href="#addColor">Create a Color</a></li>
+                    <li><a href="#colorLibrary">Color Library</a></li>
+                </ul>
+            </div><!-- /navbar -->
+        </div>
+
+
+        <!-- content -->
+        <div data-role="content" data-theme="c">
+            <div id="color-maker-message">
+                <h2>Click button to create random color list</h2>
+                <button id="random-color-btn">Create Color!</button>
+            </div>
+            <h2>Your random color list</h2>
+            <div id="random-color-list" class="random-color-list">
+            </div>
+        </div>
+
+        <!-- page footer -->
+        <div data-role="footer" id="footer">
+            <h3>Copyright 2023 by Hoa Vo & Misako Ueshima</h3>
+        </div>
+
+
+    </div>
+    <!-- ============================  END COLOR MAKER PAGE  ============================================== -->
+
+
+
+
+
+    <!-- =================================  DETAIL PAGE  ================================================= -->
+    <div data-role="page" id="details">
+
+        <!-- header -->
+        <div data-role="header">
+            <h2>Detail page</h2>
+            <div data-role="navbar" id="navbar">
+                <ul>
+                    <li><a href="#home">Home Page</a></li>
+                    <li><a href="#colorMaker">Color Maker</a></li>
+                    <li><a href="#addColor">Create a Color</a></li>
+                    <li><a href="#colorLibrary">Color Library</a></li>
+                </ul>
+            </div><!-- /navbar -->
+        </div>
+
+
+        <!-- content -->
+        <div data-role="content" data-theme="c">
+            <div id="outer-detail-container" class="outer-detail-container">
+                <div id="detail-container">
+                    <h2 id="test-para">Your Pick Color </h2>
+                    <div id="-color-container">
+                        <div id="color-item-detail">
+                            <p id="color-item-id"></p>
+                            <input id="inputR" name="RGB" type="number">
+                            <input id="inputG" name="RGB" type="number">
+                            <input id="inputB" name="RGB" type="number">
+                            <div id="button-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="picking-color-container">
+                    <div id="suggestion-color-container">
+                        <h2>Similar color list </h2>
+                        <div id="monochromatic">
+                            <div id="m1"></div>
+                            <div id="m2"></div>
+                            <div id="m3"></div>
+                            <div id="m4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+
+
+    <!-- page footer -->
+    <div data-role="footer" id="footer">
+        <h3>Copyright 2023 by Hoa Vo & Misako Ueshima</h3>
+    </div>
+</div>
+    <!-- ============================  END DETAIL PAGE  ============================================== -->
+
+
+<!-- =================================  ADD COLOR PAGE  ================================================= -->
+    <div data-role="page" id="addColor">
+
+        <!-- header -->
+        <div data-role="header">
+            <h2>RGB color creator - Add Color</h2>
+
+            <div data-role="navbar" id="navbar">
+                <ul>
+                    <li><a href="#home">Home Page</a></li>
+                    <li><a href="#colorMaker">Color Maker</a></li>
+                    <li><a href="#addColor">Create a Color</a></li>
+                    <li><a href="#colorLibrary">Color Library</a></li>
+                </ul>
+            </div><!-- /navbar -->
+        </div>
+
+        <!-- content -->
+        <div data-role="content" data-theme="c">
+            <div id="add-color-container">
+                <h2 >Create a new color</h2>
+                <h3 id = "exception-container"></h3>
+                Enter R value (0 - 255) <br />
+                <input type="number" value="" id="r-add-value" />
+                Enter G value (0 - 255) <br />
+                <input type="number" value="" id="g-add-value" />
+                Enter B value (0 - 255) <br />
+                <input type="number" value="" id="b-add-value" />
+            </div>
+            <input type="button" value="Click to add color" id="buttonAdd" data-inline="true" />
+            <input type="button" value="Clear Data" id="buttonClear" data-inline="true" />
+        </div>
+
+        <!-- page footer -->
+        <div data-role="footer" id="footer">
+            <h3>Copyright 2023 by Hoa Vo & Misako Ueshima</h3>
+        </div>
+
+
+    </div>
+    <!-- ============================  END ADD COLOR PAGE  ============================================== -->
+
+
+    <!-- ==============================    COLOR LIBRARY PAGE  =============================================== -->
+    <div data-role="page" id="colorLibrary" data-theme="a">
+
+
+        <!-- header -->
+        <div data-role="header" data-theme="c">
+            <h2>RGB color creator - Color Library</h2>
+
+            <div data-role="navbar" id="navbar" data-theme="c">
+                <ul>
+                    <li><a href="#home">Home Page</a></li>
+                    <li><a href="#colorMaker">Color Maker</a></li>
+                    <li><a href="#addColor">Create a Color</a></li>
+                    <li><a href="#colorLibrary">Color Library</a></li>
+                </ul>
+            </div><!-- /navbar -->
+        </div>
+
+
+        <!-- content -->
+        <div data-role="content" data-theme="c">
+
+            <div id="library-container">
+                <div id="library-color-container">
+                    <h2>Your library colors</h2>
+                    <!-- <button id="list-all-colors-btn">List all library colors</button> -->
+                    <div id="lbr-list-color" class="lbr-list-color"></div>
+                </div>
+            </div>
+        </div>
+
+            <!-- notes footer -->
+            <div data-role="footer" id="footer" data-theme="c">
+                <h3>Copyright 2023 by Hoa Vo & Misako Ueshima</h3>
+            </div>
+
+
+     </div>
+        <!-- ==========================   END COLOR LIBRARY PAGE  ================================== -->
+
+ <!-- =================================  LIBRARY COLOR DETAIL PAGE  =================================== -->
+    <div data-role="page" id="libraryDetails">
+
+        <!-- header -->
+        <div data-role="header">
+            <h2>Library Color Detail page</h2>
+            <div data-role="navbar" id="navbar">
+                <ul>
+                    <li><a href="#home">Home Page</a></li>
+                    <li><a href="#colorMaker">Color Maker</a></li>
+                    <li><a href="#addColor">Create a Color</a></li>
+                    <li><a href="#colorLibrary">Color Library</a></li>
+                </ul>
+            </div><!-- /navbar -->
+        </div>
+
+
+        <!-- content -->
+        <div data-role="content" data-theme="c">
+            <div id="detail-lbr-container">
+                <h2>Library color details </h2>
+                <div id="lbr-show-pick-color" class="lbr-show-pick-color">
+                    <div id="lbr-pick-color" class="lbr-pick-color"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- page footer -->
+        <div data-role="footer" id="footer">
+            <h3>Copyright 2023 by Hoa Vo & Misako Ueshima</h3>
+        </div>
+
+
+    </div>
+    <!-- ============================  END LIRARY COLOR DETAIL PAGE  ============================================== -->
+
+</body>
+
+</html>

@@ -12,43 +12,50 @@ document.addEventListener("DOMContentLoaded", function (event) {
     document.getElementById("buttonAdd").addEventListener("click", addColor);
     document.getElementById("buttonClear").addEventListener("click", clearAddForm);
 
+
+
     // color library page 
-    $(document).on("pagebeforeshow", "#colorLibrary", function (event) {   
+    $(document).on("pagebeforeshow", "#colorLibrary", function (event) {
         // have to use jQuery to get data serverRandomColorList from the server and overwrite randoColorList
-        $.get("/colorLibrary", function(data, status){
+        $.get("/colorLibrary", function (data, status) {
             randomColorList = data;
-            console.log(randomColorList);
-        
-        //showLibraryPage("lbr","index.html#libraryDetails", randomColorList);
-        let libraryColorUL = document.getElementById('lbr-list-color');
-        libraryColorUL.innerHTML = "";
-    
-        randomColorList.forEach(function (oneColor) {   // use handy array forEach method
-            console.log(oneColor.colorName);
-            appendAColor(oneColor, 'lbr-list-color', 'lbr-color-classname', 'lbr-data-parm', "li");
-            
-        });
-        activateAColor('lbr-color-classname', 'lbr-data-parm', 'lbrColorName', 'lbrColorID', "index.html#libraryDetails");
+            showLibraryPage("lbr", "index.html#libraryDetails", randomColorList);
+            let libraryColorUL = document.getElementById('lbr-list-color');
+            libraryColorUL.innerHTML = "";
+
+            randomColorList.forEach(oneColor => {   // use handy array forEach method
+                appendAColor(oneColor, 'lbr-list-color', 'lbr-color-classname', 'lbr-data-parm', "li");
+            });
+            activateAColor('lbr-color-classname', 'lbr-data-parm', 'lbrColorName', 'lbrColorID', "index.html#libraryDetails");
         });
     });
 
     // color library detail page
     document.getElementById("list-favorite-btn").addEventListener("click", showFavoriteColors);
 
-        // Color Library details page
+    // Color Library details page
     $(document).on("pagebeforeshow", "#libraryDetails", function (event) {
-        showLibraryDetailPage("lbr", randomColorList);
+        $.get("/colorLibrary", function (data, status) {
+            randomColorList = data;
+
+            showLibraryDetailPage("lbr", randomColorList);
+        });
     });
 
     // Color favorite details page
     $(document).on("pagebeforeshow", "#favoriteDetails", function (event) {
-        let showContainer = document.getElementById('frv-show-pick-color');
-        let pickContainer = document.createElement('div');
-        pickContainer.id = 'frv-pick-color';
-        pickContainer.className = 'frv-pick-color';
-        showContainer.append(pickContainer);
-        
-        showLibraryDetailPage("frv", favoriteColorList);
+
+        $.get("/favColorLibrary", function (data, status) {
+            favoriteColorList = data;
+
+            let showContainer = document.getElementById('frv-show-pick-color');
+            let pickContainer = document.createElement('div');
+            pickContainer.id = 'frv-pick-color';
+            pickContainer.className = 'frv-pick-color';
+            showContainer.append(pickContainer);
+
+            showLibraryDetailPage("frv", favoriteColorList);
+        });
     });
 
 });
@@ -56,21 +63,58 @@ document.addEventListener("DOMContentLoaded", function (event) {
 // Color Maker method
 function showRandomColorList() {
 
-    let randomColor = createObject();
-    randomColorList.push(randomColor);
-    let indexOfRandomColor = randomColorList.indexOf(randomColor);
-    appendAColor(randomColorList[indexOfRandomColor], "random-color-list", "random-color-classname", "data-parm", "div");
-    activateAColor("random-color-classname", "data-parm", "colorName", "colorIndex", "index.html#details");
 
-    // deatail page
-    // need one for our details page to fill in the info based on the passed in ID
-    $(document).on("pagebeforeshow", "#details", function (event) {
-        let colorElementIndexID = localStorage.getItem('colorIndex'); // get the unique key back from the storage dictionairy
-        let monoId = localStorage.getItem('monoID-para');
-        fillRGBinputValues(randomColorList,colorElementIndexID, "color-item-detail", "inputR", "inputG", "inputB");
-        createMonochromaticColorDiv(randomColorList, "m", "monochromatic-class-name", colorElementIndexID);
-        document.getElementById("change-btn").addEventListener('click', modifyRandomColor());
+    $.get("/colorLibrary", function (data, status) {
+        randomColorList = data;
+
+        let randomColor = createObject(randomColorList);
+        //to confirm 
+        let indexOfRandomColor = randomColor.colorID;
+        console.log(indexOfRandomColor);
+        // localStorage.setItem('INDEX', indexOfRandomColor);
+
+        //original code
+        // randomColorList.push(randomColor);
+
+        $.ajax({
+            url: "/AddColor",
+            type: "POST",
+            data: JSON.stringify(randomColor),
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                //original code (doesn't work anymore)
+                // let indexOfRandomColor = randomColorList.indexOf(randomColor.colorID);
+
+                appendAColor(randomColor, "random-color-list", "random-color-classname", "data-parm", "div");
+                // activateAColor("random-color-classname", "data-parm", "colorName", "colorIndex", "index.html#details");
+                activateAColor("random-color-classname", "data-parm", "colorName", "colorIndex", "index.html#details");
+
+                // deatail page
+                // need one for our details page to fill in the info based on the passed in ID
+                $(document).on("pagebeforeshow", "#details", function (event) {
+
+                    //original code
+                    let colorElementIndexID = localStorage.getItem('colorIndex'); // get the unique key back from the storage dictionairy
+
+                    // let colorElementIndexID = localStorage.getItem('INDEX'); // get the unique key back from the storage dictionairy
+                    let monoId = localStorage.getItem('monoID-para');
+
+                    //original code
+                    // fillRGBinputValues(randomColorList, colorElementIndexID, "color-item-detail", "inputR", "inputG", "inputB");
+                    // createMonochromaticColorDiv(randomColorList, "m", "monochromatic-class-name", colorElementIndexID);
+                    fillRGBinputValues(randomColorList, colorElementIndexID, "color-item-detail", "inputR", "inputG", "inputB");
+                    createMonochromaticColorDiv(randomColor, "m", "monochromatic-class-name", colorElementIndexID);
+                    document.getElementById("change-btn").addEventListener('click', modifyRandomColor());
+                });
+
+
+            }
+        });
+
+
+
     });
+
 };
 
 
@@ -87,11 +131,29 @@ function addColor() {
     }
     // if r,g,b in (0, 255) and the color with this r,g,b value not in the color library array yet
     else if (isAddable(rValue, gValue, bValue)) {
-        randomColorList.push(new Color(randomColorList.length, rValue, gValue, bValue));
-        document.getElementById("exception-container").textContent = "";
-        document.location.href = "index.html#colorLibrary";
+        $.get("/colorLibrary", function (data, status) {
+            randomColorList = data;
+            console.log("this is addable!")
+            //original code
+            // randomColorList.push(new Color(randomColorList.length, rValue, gValue, bValue));
+            let newRandomColor = new Color(randomColorList.length, rValue, gValue, bValue);
+            document.getElementById("exception-container").textContent = "";
+
+            $.ajax({
+                url: "/AddColor",
+                type: "POST",
+                data: JSON.stringify(newRandomColor),
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    document.location.href = "index.html#addColor";
+                }
+            });
+        });
+
     } else {
-        // print exception message this color already existing
+        console.log("this is NOT addable!")
+
+        // print exception message this color  existing
         let message = "This color: RGB(" + rValue + ", " + gValue + ", " + bValue + ") already existing in your color library";
         document.getElementById("exception-container").textContent = message;
     }
@@ -99,17 +161,20 @@ function addColor() {
 
 // return true if array color is empty or array color does not contain this rgb 
 function isAddable(rValue, gValue, bValue) {
-    if (randomColorList.length === 0) {
-        return true;
-    }
-    else {
-        for (let i = 0; i < randomColorList.length; i++) {
-            if (randomColorList[i].valueR === rValue && randomColorList[i].valueG === gValue && randomColorList[i].valueB === bValue) {
-                return false;
-            }
+    $.get("/colorLibrary", function (data, status) {
+        randomColorList = data;
+        if (randomColorList.length === 0) {
+            return true;
         }
-        return true;
-    }
+        else {
+            for (let i = 0; i < randomColorList.length; i++) {
+                if (randomColorList[i].valueR === rValue && randomColorList[i].valueG === gValue && randomColorList[i].valueB === bValue) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    });
 };
 
 function clearAddForm() {
@@ -121,14 +186,20 @@ function clearAddForm() {
 
 
 function activateAColor(aColorToActivate, dataParm, keyName, keyIndex, page) {
-    let arrayRandomColor = document.querySelectorAll(`.${aColorToActivate}`);
-    arrayRandomColor.forEach((element, i) => {
-        element.addEventListener('click', function () {
-            var colorIDName = this.getAttribute(dataParm); 
-            // now save THIS ID value in the localStorage "dictionairy"
-            localStorage.setItem(keyName, colorIDName);
-            localStorage.setItem(keyIndex, i)
-            document.location.href = page;  // this will jump us to the page
+
+    $.get("/colorLibrary", function (data, status) {
+        randomColorList = data;
+        console.log("to test  " + aColorToActivate, dataParm, keyName, keyIndex, page)
+        let arrayRandomColor = document.querySelectorAll(`.${aColorToActivate}`);
+        arrayRandomColor.forEach((element, i) => {
+            element.addEventListener('click', function () {
+                var colorIDName = this.getAttribute(dataParm);
+                console.log('ColorIDName is ' + colorIDName + ' and i is ' + i)
+                // now save THIS ID value in the localStorage "dictionairy"
+                localStorage.setItem(keyName, colorIDName);
+                localStorage.setItem(keyIndex, i)
+                document.location.href = page;  // this will jump us to the page
+            });
         });
     });
 };
@@ -136,67 +207,85 @@ function activateAColor(aColorToActivate, dataParm, keyName, keyIndex, page) {
 
 
 function fillRGBinputValues(colorArray, colorElementIndex, containerName, rInputName, gInputName, bInputName) {
-    document.getElementById(rInputName).value = colorArray[colorElementIndex].valueR;
-    document.getElementById(gInputName).value = colorArray[colorElementIndex].valueG;
-    document.getElementById(bInputName).value = colorArray[colorElementIndex].valueB;
-    document.getElementById(containerName).style.background
-                = "rgb(" + colorArray[colorElementIndex].valueR + "," + colorArray[colorElementIndex].valueG + "," + colorArray[colorElementIndex].valueB + ")";
+    $.get("/colorLibrary", function (data, status) {
+        colorArray = data;
+        document.getElementById(rInputName).value = colorArray[colorElementIndex].valueR;
+        document.getElementById(gInputName).value = colorArray[colorElementIndex].valueG;
+        document.getElementById(bInputName).value = colorArray[colorElementIndex].valueB;
+        document.getElementById(containerName).style.background
+            = "rgb(" + colorArray[colorElementIndex].valueR + "," + colorArray[colorElementIndex].valueG + "," + colorArray[colorElementIndex].valueB + ")";
+    });
 };
 
-function getInboundValue(aValue){
-    if(aValue < 0){
+
+
+function getInboundValue(aValue) {
+    if (aValue < 0) {
         return Math.max(aValue, 0);
     }
-    else if(aValue > 255){
+    else if (aValue > 255) {
         return Math.min(aValue, 255);
     }
-    else{
+    else {
         return aValue;
     }
 };
 
-function createObject() {
-    colorID = randomColorList.length;
+function createObject(array) {
+
+    colorID = array.length;
     let valueR = parseInt(Math.random() * 256);
     let valueG = parseInt(Math.random() * 256);
     let valueB = parseInt(Math.random() * 256);
-    return new Color(colorID, valueR, valueG, valueB);
+    let newColor = new Color(colorID, valueR, valueG, valueB);
+    return newColor;
+    //original code
+    //return new Color(colorID, valueR, valueG, valueB);
+
+
 };
 
 function modifyRandomColor() {
-    document.getElementById("change-btn").addEventListener('click', function () {
-        let localParm = localStorage.getItem('colorIndex');
-        updateObject(localParm);
-        fillRGBinputValues(randomColorList,localParm, "color-item-detail", "inputR", "inputG", "inputB");
-        createMonochromaticColorDiv(randomColorList,"m", "monochromatic-class-name", localParm);
-        document.location.href = "index.html#details";
+    $.get("/colorLibrary", function (data, status) {
+        randomColorList = data;
+        document.getElementById("change-btn").addEventListener('click', function () {
+            let localParm = localStorage.getItem('colorIndex');
+            console.log(localParm + 'is a local parm')
+            // updateObject(localParm);
+            fillRGBinputValues(randomColorList, localParm, "color-item-detail", "inputR", "inputG", "inputB");
+            createMonochromaticColorDiv(randomColorList, "m", "monochromatic-class-name", localParm);
+            document.location.href = "index.html#details";
+        });
     });
 };
 
 function updateObject(localParm) {
-    console.log(localParm);
-    let r = document.getElementById("inputR").value;
-    let g = document.getElementById("inputG").value;
-    let b = document.getElementById("inputB").value;
-    r = getInboundValue(r);
-    g = getInboundValue(g);
-    b = getInboundValue(b);
+    $.get("/colorLibrary", function (data, status) {
+        randomColorList = data;
+        console.log(localParm);
+        let r = document.getElementById("inputR").value;
+        let g = document.getElementById("inputG").value;
+        let b = document.getElementById("inputB").value;
+        r = getInboundValue(r);
+        g = getInboundValue(g);
+        b = getInboundValue(b);
 
-    return randomColorList[localParm].valueR = r,
-        randomColorList[localParm].valueG = g,
-        randomColorList[localParm].valueB = b;
+        return randomColorList[localParm].valueR = r,
+            randomColorList[localParm].valueG = g,
+            randomColorList[localParm].valueB = b;
+    });
 }
 
 // Append the created object color to the page
 function appendAColor(aColor, listContainerName, colorClassName, dataParm, elementType) {
     let pageRandomColorPlaceHolder = document.getElementById(listContainerName);
-    pageRandomColorPlaceHolder.append(displayColor(aColor,colorClassName, dataParm, elementType));
+    pageRandomColorPlaceHolder.append(displayColor(aColor, colorClassName, dataParm, elementType));
 
 };
 
-function displayButton (aColor, colorClassName, buttonName, buttonColor){
+function displayButton(aColor, colorClassName, buttonName, buttonColor) {
     let rgbButton = document.createElement("button");
-    rgbButton.className = colorClassName +"-btn";
+    rgbButton.className = colorClassName + "-btn";
     rgbButton.id = aColor.colorID;
     rgbButton.setAttribute(colorClassName + "-parm", rgbButton.id);
     rgbButton.textContent = buttonName;
@@ -205,7 +294,7 @@ function displayButton (aColor, colorClassName, buttonName, buttonColor){
 };
 
 
-function displayColor (oneColor, colorClassName, dataParm, elementType) {
+function displayColor(oneColor, colorClassName, dataParm, elementType) {
     let aColor = document.createElement(elementType);
     aColor.className = colorClassName;
     aColor.id = oneColor.colorName;
@@ -224,84 +313,157 @@ function appendAButton(aColor, listContainerName, colorClassName, buttonName, bu
 };
 
 
-function createMonochromaticColorDiv(colorArray, preMonoID, monoClassName, colorIndex) {
+function createMonochromaticColorDiv(randomColor, preMonoID, monoClassName, colorIndex) {
+
     //colorElementID is "RGB" + RandomColorList.valueR + RandomColorList.valueG + RandomColorList.valueB
-    moColorList = [];
-    for (i = 1; i < 5; i++) { //i ...number of 0 to 4 because there are 4 color suggestions
-        document.getElementById(`${preMonoID}${i}`).textContent = "";
-        let aMonoColor = document.createElement("div")
-        aMonoColor.className = monoClassName;
-        let monoColorID = colorArray[colorIndex].colorName + [i];
-        aMonoColor.id = monoColorID;
-        document.getElementById(`${preMonoID}${i}`).append(aMonoColor);
+    $.get("/colorLibrary", function (colorData, status) {
+        let colorArray = colorData;
+        // let MonochromaticColor = colorArray[colorIndex].MonochromaticColor;
+
+        $.get("/monoColorLibrary", function (data, status) {
+            moColorList = data;
+
+
+            //to confirm///////
+            console.log("Test whether I can get property of array..." + colorArray[colorIndex].colorID + " is the current colorArray object's color ID")
+
+
+
+            for (i = 1; i < 5; i++) { //i ...number of 0 to 4 because there are 4 color suggestions
+
+
+
+                console.log(`preMonoID is ${preMonoID}${i}`);
+
+                document.getElementById(`${preMonoID}${i}`).textContent = "";
+                let aMonoColor = document.createElement("div")
+                aMonoColor.className = monoClassName;
+
+                //to confirm
+                console.log(i, aMonoColor, colorArray[colorIndex].valueR, colorArray[colorIndex].valueG, colorArray[colorIndex].valueB);
+
+
+                let monoColorID = colorArray[colorIndex].colorName + [i];
+                aMonoColor.id = monoColorID;
+                document.getElementById(`${preMonoID}${i}`).append(aMonoColor);
                 //to get similar color suggestions and create these array & ids
 
-        let newRGB = colorArray[colorIndex].MonochromaticColor(i, aMonoColor, colorArray[colorIndex].valueR, colorArray[colorIndex].valueG, colorArray[colorIndex].valueB);
 
-        document.getElementById(`${preMonoID}${i}`).style.background = `rgb(${newRGB[0]}, ${newRGB[1]}, ${newRGB[2]})`;
+                let newRGB = randomColor.MonochromaticColor(i, aMonoColor, colorArray[colorIndex].valueR, colorArray[colorIndex].valueG, colorArray[colorIndex].valueB);
+                document.getElementById(`${preMonoID}${i}`).style.background = `rgb(${newRGB[0]}, ${newRGB[1]}, ${newRGB[2]})`;
+                document.getElementById(monoColorID).textContent = `rgb(${newRGB[0]}, ${newRGB[1]}, ${newRGB[2]})`;
 
-        document.getElementById(monoColorID).textContent = `rgb(${newRGB[0]}, ${newRGB[1]}, ${newRGB[2]})`;
 
-        moColorList.push(new Color(moColorList.length, newRGB[0], newRGB[1], newRGB[2]));
+                let newMoColor = new Color(moColorList.length, newRGB[0], newRGB[1], newRGB[2]);
 
-       // console.log(addToFavoriteList(aMonoColor.id));
-    };
+                //original code
+                // moColorList.push(new Color(moColorList.length, newRGB[0], newRGB[1], newRGB[2]));
+                $.ajax({
+                    url: "/AddMoColor",
+                    type: "POST",
+                    data: JSON.stringify(newMoColor),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+                        // console.log(result);
+                        // document.location.href = "index.html#details";
+                    }
+                });
+            };
 
-    let tempMoColorList = document.querySelectorAll('.suggestion-color-btn');
-    tempMoColorList.forEach((element, i) => {
-        element.setAttribute('tempMono', i);
-        element.setAttribute('tempMonoName', moColorList.colorName);
-     });
 
-    let stringTempMoArray = JSON.stringify(moColorList); // convert array to "string"
-    localStorage.setItem('tempMonoArray', stringTempMoArray);
-    
-    // buttons add to favorite, for each button get its attributes tempMono, tempMonoName -> save to local storage, and call addTofavorite function
-    let tempMoColList = document.querySelectorAll('.suggestion-color-btn');
-    tempMoColList.forEach((element, i) => {
-        element.addEventListener('click', function () {
-            monoTempAttr = this.getAttribute('tempMono'); 
-            monoTempPosAttr = this.getAttribute('tempMonoName'); 
-            localStorage.setItem('tempMonoId', monoTempAttr);  
-            localStorage.setItem('tempMonoNameId', monoTempPosAttr);  
-            addTofavorite() ; 
-         });
-    }); 
+
+            let tempMoColorList = document.querySelectorAll('.suggestion-color-btn');
+            tempMoColorList.forEach((element, i) => {
+                element.setAttribute('tempMono', i);
+                element.setAttribute('tempMonoName', moColorList.colorName);
+            });
+
+
+
+            let stringTempMoArray = JSON.stringify(moColorList); // convert array to "string"
+            localStorage.setItem('tempMonoArray', stringTempMoArray);
+
+            // buttons add to favorite, for each button get its attributes tempMono, tempMonoName -> save to local storage, and call addTofavorite function
+            let tempMoColList = document.querySelectorAll('.suggestion-color-btn');
+            tempMoColList.forEach((element, i) => {
+                element.addEventListener('click', function () {
+                    monoTempAttr = this.getAttribute('tempMono');
+                    monoTempPosAttr = this.getAttribute('tempMonoName');
+                    localStorage.setItem('tempMonoId', monoTempAttr);
+                    localStorage.setItem('tempMonoNameId', monoTempPosAttr);
+                    addTofavorite();
+                });
+            });
+        });
+    });
 
 };
 
-function addTofavorite(){
-    let frvColorPick = localStorage.getItem('tempMonoId');
-    let frvCoNamePick = localStorage.getItem('tempMonoNameId');
-    let monoColorArr = JSON.parse(localStorage.getItem('tempMonoArray')); 
+function addTofavorite() {
+    $.get("/favoriteColorLibrary", function (data, status) {
+        favoriteColorList = data;
 
-    let lastColor = '';
-    if(favoriteColorList.length === 0){
-        favoriteColorList.push(new Color(favoriteColorList.length, monoColorArr[frvColorPick].valueR, monoColorArr[frvColorPick].valueG, monoColorArr[frvColorPick].valueB));
-        alert(`Add RGB( ${monoColorArr[frvColorPick].valueR}, ${monoColorArr[frvColorPick].valueG}, ${monoColorArr[frvColorPick].valueB}) to your favorite list`);
-    }
-    else {
-        lastColor = favoriteColorList[favoriteColorList.length -1].colorName;
-        if (lastColor !== monoColorArr[frvColorPick].colorName){
-            favoriteColorList.push(new Color(favoriteColorList.length, monoColorArr[frvColorPick].valueR, monoColorArr[frvColorPick].valueG, monoColorArr[frvColorPick].valueB));
-            alert(`Add RGB( ${monoColorArr[frvColorPick].valueR}, ${monoColorArr[frvColorPick].valueG}, ${monoColorArr[frvColorPick].valueB}) to your favorite list`);
+
+        let frvColorPick = localStorage.getItem('tempMonoId');
+        let frvCoNamePick = localStorage.getItem('tempMonoNameId');
+        let monoColorArr = JSON.parse(localStorage.getItem('tempMonoArray'));
+        console.log(frvColorPick);
+        console.log(monoColorArr);
+
+        let lastColor = '';
+        if (favoriteColorList.length === 0) {
+            let newFavoriteColor = new Color(favoriteColorList.length, monoColorArr[frvColorPick].valueR, monoColorArr[frvColorPick].valueG, monoColorArr[frvColorPick].valueB)
+            //original code
+            // favoriteColorList.push(new Color(favoriteColorList.length, monoColorArr[frvColorPick].valueR, monoColorArr[frvColorPick].valueG, monoColorArr[frvColorPick].valueB));
+            $.ajax({
+                url: "/AddFavColor",
+                type: "POST",
+                data: JSON.stringify(newFavoriteColor),
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    alert(`Add RGB( ${monoColorArr[frvColorPick].valueR}, ${monoColorArr[frvColorPick].valueG}, ${monoColorArr[frvColorPick].valueB}) to your favorite list`);
+                }
+            });
         }
-    }
+        else {
+            lastColor = favoriteColorList[favoriteColorList.length - 1].colorName;
+            if (lastColor !== monoColorArr[frvColorPick].colorName) {
+                let newFavoriteColor = new Color(favoriteColorList.length, monoColorArr[frvColorPick].valueR, monoColorArr[frvColorPick].valueG, monoColorArr[frvColorPick].valueB)
+                //original code
+                // favoriteColorList.push(new Color(favoriteColorList.length, monoColorArr[frvColorPick].valueR, monoColorArr[frvColorPick].valueG, monoColorArr[frvColorPick].valueB));
+                $.ajax({
+                    url: "/AddFavColor",
+                    type: "POST",
+                    data: JSON.stringify(newFavoriteColor),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+                        alert(`Add RGB( ${monoColorArr[frvColorPick].valueR}, ${monoColorArr[frvColorPick].valueG}, ${monoColorArr[frvColorPick].valueB}) to your favorite list`);
+                        // document.location.href = "index.html#ListAll";
+                    }
+                });
+            }
+        }
+
+
+    });
 };
 
 
-function showLibraryPage(lbr, page, aArray){
+function showLibraryPage(lbr, page, aArray) {
+    // $.get("/colorLibrary", function (data, status) {
+    //     aArray = data;
     let libraryColorUL = document.getElementById(`${lbr}-list-color`);
     libraryColorUL.innerHTML = "";
 
     aArray.forEach(function (oneColor) {   // use handy array forEach method
         appendAColor(oneColor, `${lbr}-list-color`, `${lbr}-color-classname`, `${lbr}-data-parm`, "li");
-        
+
     });
     activateAColor(`${lbr}-color-classname`, `${lbr}-data-parm`, `${lbr}ColorName`, `${lbr}ColorID`, page);
+    // });
 };
 
-function showLibraryDetailPage(aLbr, aArray){
+function showLibraryDetailPage(aLbr, aArray) {
     document.getElementById(`${aLbr}-pick-color`).remove();
     //document.getElementById(`${aLbr}-pick-color`).textContent = "";
     let libraryPickContainer = document.createElement("div");
@@ -320,9 +482,13 @@ function showLibraryDetailPage(aLbr, aArray){
     });
 };
 
-function showFavoriteColors(){
-    if(favoriteColorList.length === 0){
-        alert('Your favorite list is empty!');
-    }
-    showLibraryPage("frv","index.html#favoriteDetails", favoriteColorList);
+function showFavoriteColors() {
+    $.get("/favoriteColorLibrary", function (data, status) {
+        favoriteColorList = data;
+
+        if (favoriteColorList.length === 0) {
+            alert('Your favorite list is empty!');
+        }
+        showLibraryPage("frv", "index.html#favoriteDetails", favoriteColorList);
+    });
 };

@@ -17,9 +17,9 @@ Color.prototype.displayColor = function (colorClassName, dataParm, elementType) 
     return aColor;
 };
 
-Color.prototype.displayButton = function(colorClassName, buttonName, buttonColor){
+Color.prototype.displayButton = function (colorClassName, buttonName, buttonColor) {
     let rgbButton = document.createElement("button");
-    rgbButton.className = colorClassName +"-btn";
+    rgbButton.className = colorClassName + "-btn";
     rgbButton.id = this.colorID;
     rgbButton.setAttribute(colorClassName + "-parm", rgbButton.id);
     rgbButton.textContent = buttonName;
@@ -46,27 +46,28 @@ Color.prototype.MonochromaticColor = function (i, aMonoColor, r, g, b) {
         h /= 6;
     }
 
-    randomColorList.forEach(element => {
-        //aMonoColor1 has -50% of value
-        if (aMonoColor.id == element.colorName + 0) {
-            s *= 0.50;
-        }
-        //aMonoColor2 has +50% of value
-        if (aMonoColor.id == element.colorName + 1) {
-            s *= 1.50;
-        }
-        //aMonoColor3 has -50% of satuation
-        if (aMonoColor.id == element.colorName + 2) {
-            v *= 0.50
-        }
-        //aMonoColor4 has +50% of satuation
-        if (aMonoColor.id == element.colorName + 3) {
-            v *= 1.50;
-        }
-    });
 
-    // console.log(`when color id is ${aMonoColor.id} monochromatic color's HSB` + h, s, v)
-    return HSVtoRGB(i, aMonoColor.id, h, s, v);
+        randomColorList.forEach(element => {
+            //aMonoColor1 has -50% of value
+            if (aMonoColor.id == element.colorName + 0) {
+                s *= 0.50;
+            }
+            //aMonoColor2 has +50% of value
+            if (aMonoColor.id == element.colorName + 1) {
+                s *= 1.50;
+            }
+            //aMonoColor3 has -50% of satuation
+            if (aMonoColor.id == element.colorName + 2) {
+                v *= 0.50
+            }
+            //aMonoColor4 has +50% of satuation
+            if (aMonoColor.id == element.colorName + 3) {
+                v *= 1.50;
+            }
+        });
+
+        // console.log(`when color id is ${aMonoColor.id} monochromatic color's HSB` + h, s, v)
+        return HSVtoRGB(i, aMonoColor.id, h, s, v);
 
 
 };
@@ -118,14 +119,14 @@ function HSVtoRGB(i, aMonoColorID, h, s, v) {
 
 };
 
-function getInboundValue(aValue){
-    if(aValue < 0){
+function getInboundValue(aValue) {
+    if (aValue < 0) {
         return Math.max(aValue, 0);
     }
-    else if(aValue > 255){
+    else if (aValue > 255) {
         return Math.min(aValue, 255);
     }
-    else{
+    else {
         return aValue;
     }
 }
