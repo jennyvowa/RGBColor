@@ -119,15 +119,13 @@
             <div id="outer-detail-container" class="outer-detail-container">
                 <div id="detail-container">
                     <h2 id="test-para">Your Pick Color </h2>
-                    <div id="modify-color-container">
+                    <div id="-color-container">
                         <div id="color-item-detail">
                             <p id="color-item-id"></p>
                             <input id="inputR" name="RGB" type="number">
                             <input id="inputG" name="RGB" type="number">
                             <input id="inputB" name="RGB" type="number">
-                            <div id="button-container">
-                                <button id="change-btn">Change</button>              
-                            </div>
+                            <div id="button-container"></div>
                         </div>
                     </div>
                 </div>
@@ -137,17 +135,9 @@
                         <h2>Similar color list </h2>
                         <div id="monochromatic">
                             <div id="m1"></div>
-                            <button id="m1-btn" class="suggestion-color-btn">Add to favorite</button>
-
                             <div id="m2"></div>
-                            <button id="m2-btn" class="suggestion-color-btn">Add to favorite</button>
-
                             <div id="m3"></div>
-                            <button id="m3-btn" class="suggestion-color-btn">Add to favorite</button>
-
                             <div id="m4"></div>
-                            <button id="m4-btn" class="suggestion-color-btn">Add to favorite</button>
-
                         </div>
                     </div>
                 </div>
@@ -234,11 +224,6 @@
                     <!-- <button id="list-all-colors-btn">List all library colors</button> -->
                     <div id="lbr-list-color" class="lbr-list-color"></div>
                 </div>
-
-                <div id="favorite-color-container">
-                    <input type="button" value="List favorite colors" id="list-favorite-btn" data-inline="true" />
-                    <div id="frv-list-color" class="frv-list-color"></div>
-                </div>              
             </div>
         </div>
 
@@ -276,13 +261,6 @@
                     <div id="lbr-pick-color" class="lbr-pick-color"></div>
                 </div>
             </div>
-
-    <!--        <div id="detail-fvr-container">
-                <h2>Favorite color details </h2>
-                <div id="frv-show-pick-color" class="frv-show-pick-color">
-                    <div id="fvr-pick-color" class="fvr-pick-color"></div>
-                </div>
-            </div> -->
         </div>
 
         <!-- page footer -->
@@ -293,50 +271,6 @@
 
     </div>
     <!-- ============================  END LIRARY COLOR DETAIL PAGE  ============================================== -->
-
- <!-- =================================  FAVORITE COLOR DETAIL PAGE  =================================== -->
-    <div data-role="page" id="favoriteDetails">
-
-        <!-- header -->
-        <div data-role="header">
-            <h2>Favorite Color Detail page</h2>
-            <div data-role="navbar" id="navbar">
-                <ul>
-                    <li><a href="#home">Home Page</a></li>
-                    <li><a href="#colorMaker">Color Maker</a></li>
-                    <li><a href="#addColor">Create a Color</a></li>
-                    <li><a href="#colorLibrary">Color Library</a></li>
-                </ul>
-            </div><!-- /navbar -->
-        </div>
-
-
-        <!-- content -->
-        <div data-role="content" data-theme="c">
-         <!--   <div id="detail-lbr-container">
-                <h2>Library color details </h2>
-                <div id="lbr-show-pick-color" class="lbr-show-pick-color">
-                    <div id="lbr-pick-color" class="lbr-pick-color"></div>
-                </div>
-            </div>   -->
-
-            <div id="detail-fvr-container">
-                <h2>Favorite color details </h2>
-                <div id="frv-show-pick-color" class="frv-show-pick-color">
-                    <div id="fvr-pick-color" class="fvr-pick-color"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- page footer -->
-        <div data-role="footer" id="footer">
-            <h3>Copyright 2023 by Hoa Vo & Misako Ueshima</h3>
-        </div>
-
-
-    </div>
-    <!-- ============================  END FAVORITE COLOR DETAIL PAGE  ============================================== -->
-
 
 </body>
 
