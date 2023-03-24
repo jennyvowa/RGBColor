@@ -46,7 +46,8 @@ Color.prototype.MonochromaticColor = function (i, aMonoColor, r, g, b) {
         h /= 6;
     }
 
-
+    // $.get("/colorLibrary", function (data, status) {
+    //     randomColorList = data;
         randomColorList.forEach(element => {
             //aMonoColor1 has -50% of value
             if (aMonoColor.id == element.colorName + 0) {
@@ -68,7 +69,7 @@ Color.prototype.MonochromaticColor = function (i, aMonoColor, r, g, b) {
 
         // console.log(`when color id is ${aMonoColor.id} monochromatic color's HSB` + h, s, v)
         return HSVtoRGB(i, aMonoColor.id, h, s, v);
-
+    // });
 
 };
 

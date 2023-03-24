@@ -20,6 +20,7 @@ Color.prototype.displayColor = function (colorClassName, dataParm, elementType) 
   let aColor = document.createElement(elementType);
   aColor.className = colorClassName;
   aColor.id = this.colorName;
+  localStorage.setItem('INDEX', aColor.id);
   aColor.setAttribute(dataParm, aColor.id);
   aColor.textContent = `ColorID ${this.colorID} :  RGB ${this.valueR} : ${this.valueG} : ${this.valueB}`;
   aColor.style.background = "rgb(" + this.valueR + "," + this.valueG + "," + this.valueB + ")";
@@ -141,13 +142,46 @@ function getInboundValue(aValue) {
   }
 }
 
+//putting data into a file
+var fs = require("fs");
+let fileManager = {
+  // x: 33,
+  read: function () {
+    var rawdata = fs.readFileSync('objectdata.json');
+    let goodData = JSON.parse(rawdata);
+    serverRandomColorList = goodData;
+  },
+
+  write: function () {
+    let data = JSON.stringify(serverRandomColorList);
+    fs.writeFileSync('objectdata.json', data);
+  },
+
+  validData: function () {
+    var rawdata = fs.readFileSync('objectdata.json');
+    console.log(rawdata.length);
+    if (rawdata.length < 1) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+};
+
+if (!fileManager.validData()) {
+  // add colors to file random color list to confirm
+  // serverRandomColorList.push(new Color(0, 20, 20, 20));
+  // serverRandomColorList.push(new Color(1, 100, 100, 100));
+  fileManager.write();
+}
+else {
+  fileManager.read(); // do have prior movies so load up the array
+}
 
 
 
 
-// add colors to server random color list to confirm
-// serverRandomColorList.push(new Color(0, 20, 20, 20));
-// serverRandomColorList.push(new Color(1, 100, 100, 100));
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -155,6 +189,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/colorLibrary', function (req, res, next) {
+  fileManager.read();
   //reply to the get
   res.status(200).json(serverRandomColorList);
 });
@@ -177,6 +212,7 @@ router.post('/AddColor', function (req, res, next) {
   //reply to the post
   let newServerRandomColor = req.body;
   serverRandomColorList.push(newServerRandomColor);
+  fileManager.write();
   res.status(200).json(serverRandomColorList);
 });
 

@@ -41,6 +41,23 @@
         <div data-role="content" data-theme="a">
             <div id="homediv">
                 <h2 id="title">Create Your Color Library</h2>
+                <div id="explanation">
+                    <h3>This website provides convenient ways to explore and generate various colors with ready-to-use rgb codes</h3>
+                    <div id="page-explanation">
+                        <div id="page1">
+                            <h4><a href="#colorMaker">Color Maker</a></h4>
+                            <h4>Colors are randomly generated with R,G,B values between 0 & 255 and a list of similar colors is provided.</h4>
+                        </div>
+                        <div id="page2">
+                            <h4><a href="#addColor">Create a Color</a></h4>
+                            <h4>You can add a color by providing R, G, B values and the color will be added to your color library.</h4>
+                        </div>
+                        <div id="page3">
+                            <h4><a href="#colorLibrary">Color Library</a></h4>
+                            <h4>You can view all the colors you have generated and added. Choose a color to get its RGB code!</h4>
+                        </div>
+                    </div>
+                </div>
                 <img src="images/color_library.png" alt="an image of color library">
             </div>
         </div>
@@ -79,8 +96,9 @@
                 <h2>Click button to create random color list</h2>
                 <button id="random-color-btn">Create Color!</button>
             </div>
-            <h2>Your random color list</h2>
-            <div id="random-color-list" class="random-color-list">
+            <div id="color-maker-list">
+                <h2>Your random color list</h2>
+                <div id="random-color-list" class="random-color-list"> </div>
             </div>
         </div>
 
@@ -119,15 +137,13 @@
             <div id="outer-detail-container" class="outer-detail-container">
                 <div id="detail-container">
                     <h2 id="test-para">Your Pick Color </h2>
-                    <div id="modify-color-container">
+                    <div id="-color-container">
                         <div id="color-item-detail">
                             <p id="color-item-id"></p>
                             <input id="inputR" name="RGB" type="number">
                             <input id="inputG" name="RGB" type="number">
                             <input id="inputB" name="RGB" type="number">
-                            <div id="button-container">
-                                <button id="change-btn">Change</button>              
-                            </div>
+                            <div id="button-container"></div>
                         </div>
                     </div>
                 </div>
@@ -137,33 +153,25 @@
                         <h2>Similar color list </h2>
                         <div id="monochromatic">
                             <div id="m1"></div>
-                            <button id="m1-btn" class="suggestion-color-btn">Add to favorite</button>
-
                             <div id="m2"></div>
-                            <button id="m2-btn" class="suggestion-color-btn">Add to favorite</button>
-
                             <div id="m3"></div>
-                            <button id="m3-btn" class="suggestion-color-btn">Add to favorite</button>
-
                             <div id="m4"></div>
-                            <button id="m4-btn" class="suggestion-color-btn">Add to favorite</button>
-
                         </div>
                     </div>
                 </div>
             </div>
-         </div>
+        </div>
 
 
-    <!-- page footer -->
-    <div data-role="footer" id="footer">
-        <h3>Copyright 2023 by Hoa Vo & Misako Ueshima</h3>
+        <!-- page footer -->
+        <div data-role="footer" id="footer">
+            <h3>Copyright 2023 by Hoa Vo & Misako Ueshima</h3>
+        </div>
     </div>
-</div>
     <!-- ============================  END DETAIL PAGE  ============================================== -->
 
 
-<!-- =================================  ADD COLOR PAGE  ================================================= -->
+    <!-- =================================  ADD COLOR PAGE  ================================================= -->
     <div data-role="page" id="addColor">
 
         <!-- header -->
@@ -183,8 +191,8 @@
         <!-- content -->
         <div data-role="content" data-theme="c">
             <div id="add-color-container">
-                <h2 >Create a new color</h2>
-                <h3 id = "exception-container"></h3>
+                <h2>Create a new color</h2>
+                <h3 id="exception-container"></h3>
                 Enter R value (0 - 255) <br />
                 <input type="number" value="" id="r-add-value" />
                 Enter G value (0 - 255) <br />
@@ -230,28 +238,23 @@
 
             <div id="library-container">
                 <div id="library-color-container">
-                    <h2>Your library colors</h2>
+                    <h2>Your Color Library</h2>
                     <!-- <button id="list-all-colors-btn">List all library colors</button> -->
                     <div id="lbr-list-color" class="lbr-list-color"></div>
                 </div>
-
-                <div id="favorite-color-container">
-                    <input type="button" value="List favorite colors" id="list-favorite-btn" data-inline="true" />
-                    <div id="frv-list-color" class="frv-list-color"></div>
-                </div>              
             </div>
         </div>
 
-            <!-- notes footer -->
-            <div data-role="footer" id="footer" data-theme="c">
-                <h3>Copyright 2023 by Hoa Vo & Misako Ueshima</h3>
-            </div>
+        <!-- notes footer -->
+        <div data-role="footer" id="footer" data-theme="c">
+            <h3>Copyright 2023 by Hoa Vo & Misako Ueshima</h3>
+        </div>
 
 
-     </div>
-        <!-- ==========================   END COLOR LIBRARY PAGE  ================================== -->
+    </div>
+    <!-- ==========================   END COLOR LIBRARY PAGE  ================================== -->
 
- <!-- =================================  LIBRARY COLOR DETAIL PAGE  =================================== -->
+    <!-- =================================  LIBRARY COLOR DETAIL PAGE  =================================== -->
     <div data-role="page" id="libraryDetails">
 
         <!-- header -->
@@ -276,13 +279,6 @@
                     <div id="lbr-pick-color" class="lbr-pick-color"></div>
                 </div>
             </div>
-
-    <!--        <div id="detail-fvr-container">
-                <h2>Favorite color details </h2>
-                <div id="frv-show-pick-color" class="frv-show-pick-color">
-                    <div id="fvr-pick-color" class="fvr-pick-color"></div>
-                </div>
-            </div> -->
         </div>
 
         <!-- page footer -->
@@ -293,50 +289,6 @@
 
     </div>
     <!-- ============================  END LIRARY COLOR DETAIL PAGE  ============================================== -->
-
- <!-- =================================  FAVORITE COLOR DETAIL PAGE  =================================== -->
-    <div data-role="page" id="favoriteDetails">
-
-        <!-- header -->
-        <div data-role="header">
-            <h2>Favorite Color Detail page</h2>
-            <div data-role="navbar" id="navbar">
-                <ul>
-                    <li><a href="#home">Home Page</a></li>
-                    <li><a href="#colorMaker">Color Maker</a></li>
-                    <li><a href="#addColor">Create a Color</a></li>
-                    <li><a href="#colorLibrary">Color Library</a></li>
-                </ul>
-            </div><!-- /navbar -->
-        </div>
-
-
-        <!-- content -->
-        <div data-role="content" data-theme="c">
-         <!--   <div id="detail-lbr-container">
-                <h2>Library color details </h2>
-                <div id="lbr-show-pick-color" class="lbr-show-pick-color">
-                    <div id="lbr-pick-color" class="lbr-pick-color"></div>
-                </div>
-            </div>   -->
-
-            <div id="detail-fvr-container">
-                <h2>Favorite color details </h2>
-                <div id="frv-show-pick-color" class="frv-show-pick-color">
-                    <div id="fvr-pick-color" class="fvr-pick-color"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- page footer -->
-        <div data-role="footer" id="footer">
-            <h3>Copyright 2023 by Hoa Vo & Misako Ueshima</h3>
-        </div>
-
-
-    </div>
-    <!-- ============================  END FAVORITE COLOR DETAIL PAGE  ============================================== -->
-
 
 </body>
 

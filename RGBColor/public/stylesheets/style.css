@@ -1,38 +1,111 @@
-html, body {
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
+
+html,
+body {
     height: 100vh;
     width: 100vw;
 }
 
-#lbr-pick-val, #monochromatic, #modify-color-container, #frv-pick-val {
+#homediv {
+    /* display:flex; */
+    text-align: center;
+}
+
+img {
+    width: 90%;
+}
+
+#explanation {
+    padding: 1rem;
+}
+
+#title {
+    font-family: 'Roboto', sans-serif;
+    font-family: 'Work Sans', sans-serif;
+    letter-spacing: 0.5rem;
+    font-size: 1.5rem;
+}
+
+#color-maker-message,
+#color-maker-list>h2,
+#add-color-container>h2,
+#library-color-container>h2,
+#detail-container>h2,
+#suggestion-color-container>h2 {
+    text-align: center;
+}
+
+/* #monochromatic > div{
+    margin: 0.5rem;
+} */
+
+#page-explanation {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: row;
+}
+
+#page1,
+#page2,
+#page3 {
+    flex: 1;
+    padding: 1rem;
+    margin: 0.5rem;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    font-weight: lighter;
+    border: 1px solid white;
+}
+
+li>a {
+    color: white;
+}
+
+
+#lbr-pick-val,
+#monochromatic,
+#modify-color-container,
+#frv-pick-val {
     text-align: center;
     padding: 0.5rem;
 }
 
-#lbr-pick-color, #frv-pick-color {
-    display:flex;
+#lbr-pick-color,
+#frv-pick-color {
+    display: flex;
     flex-direction: column;
     text-align: center;
     width: 40%;
 }
 
-.lbrPickColor, #color-item-detail, .frvPickColor {
+.lbrPickColor,
+#color-item-detail,
+.frvPickColor {
     padding: 0.5rem;
     text-align: center;
     font-weight: bold;
 }
 
 .outer-detail-container {
-    display:flex;
+    display: flex;
     justify-content: center;
 }
 
-#detail-container, #picking-color-container {
-    background-color:lightyellow;
+#detail-container,
+#picking-color-container {
+    background-color: lightyellow;
     padding: 10px;
     width: 40%;
     margin: 10px;
 }
 
-#m1, #m2, #m3, #m4, .random-color-classname, .lbr-color-classname, .frv-color-classname {
+#m1,
+#m2,
+#m3,
+#m4,
+.random-color-classname,
+.lbr-color-classname,
+.frv-color-classname {
     padding: 0.5rem;
 }
